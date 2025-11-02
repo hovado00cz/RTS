@@ -1,0 +1,4 @@
+C:/Users/hovad/Desktop/RTS/out/build/x64-Debug/CMakeFiles/rts_core.dir
+C:/Users/hovad/Desktop/RTS/out/build/x64-Debug/CMakeFiles/rts_sdl.dir
+C:/Users/hovad/Desktop/RTS/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/hovad/Desktop/RTS/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir

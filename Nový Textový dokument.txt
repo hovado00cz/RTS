@@ -1,0 +1,4 @@
+Remove-Item -Recurse -Force .\build -ErrorAction SilentlyContinue
+cmake -B build -S . -G "Visual Studio 17 2022" -A x64 -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake
+cmake --build build --config Release
+.\build\Release\rts_sdl.exe

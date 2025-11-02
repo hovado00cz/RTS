@@ -1,0 +1,4 @@
+C:/Users/hovad/Desktop/RTS/build/CMakeFiles/rts_core.dir
+C:/Users/hovad/Desktop/RTS/build/CMakeFiles/rts_sdl.dir
+C:/Users/hovad/Desktop/RTS/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/hovad/Desktop/RTS/build/CMakeFiles/ZERO_CHECK.dir
