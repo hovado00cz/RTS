@@ -1,11 +1,10 @@
-# Update: A* pathfinding + Worker gathering + Sprites + HUD
+# RTS - SDL2 - Strategie
 
-What's new:
-- A* pathfinding (diagonals enabled), per-tick path consumption.
-- Worker RMB on **G** (gold) or **T** (trees) -> auto **gather → deliver** loop.
-- Drop-off tile **D** (a hut). Delivery increases **Gold/Wood**.
-- Sprite rendering via **BMP atlases** with magenta color key (no solid squares).
-- Simple HUD bar with Gold/Wood counters (bitmap digits, no SDL_ttf required).
+Co je funkční:
+- Stavba budov.
+- Dělníci po skácení stromu/zlata jdou na dalčí.
+- Polofunkční UI.
+- Sprite postav, budov, atd.
 
-Controls:
-- LMB drag to select, RMB on ground to move, RMB on resources with worker to gather.
+Ovládání:
+- Levé tlařítko myši (táhnutí), pravé tlařítko myši (pohyb, akce).
