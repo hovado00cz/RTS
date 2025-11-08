@@ -6,6 +6,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <limits>
+#include <fstream>
+#include <sstream>
 
 Sim::Sim(){}
 
@@ -196,12 +198,39 @@ void cancel_building(Sim& s, BuildingId id, bool refund) {
     }
 }
 
+void remove_building(Sim& s, BuildingId id, bool refund){
+    for(size_t i=0;i<s.buildings.size();++i){
+        if(s.buildings[i].id!=id) continue;
+        Building b = s.buildings[i];
+
+        set_block(s.map, b.tile.x, b.tile.y, b.w, b.h, false);
+
+        // refund jen pokud nebyla dokončená
+        if(refund && b.state != BuildState::Complete){
+            s.gold += b.cost_gold;
+            s.wood += b.cost_wood;
+        }
+
+        // pokud to byl hotový Dropoff, smaž i z registru dropoffů
+        if(b.state == BuildState::Complete && b.kind == BuildingKind::Dropoff){
+            auto it = std::find_if(s.dropoffs.begin(), s.dropoffs.end(),
+                [&](const Vec2i& d){ return d.x==b.tile.x && d.y==b.tile.y; });
+            if(it != s.dropoffs.end()) s.dropoffs.erase(it);
+        }
+
+        s.buildings.erase(s.buildings.begin()+i);
+        return;
+    }
+}
+
 static inline int IDX(int w,int x,int y){ return y*w + x; }
 
 void init_resources_from_tiles(Sim& sim, int wood_amount, int gold_amount){
     auto& m = sim.map;
     m.res_kind.resize(m.width * m.height);
     m.res_amount.resize(m.width * m.height);
+    m.res_max.resize(m.width * m.height); // NEW
+
     for(int y=0;y<m.height;++y){
         for(int x=0;x<m.width;++x){
             int i = IDX(m.width,x,y);
@@ -209,12 +238,15 @@ void init_resources_from_tiles(Sim& sim, int wood_amount, int gold_amount){
             if(t == 3){ // forest
                 m.res_kind[i]   = (uint8_t)ResourceKind::Wood;
                 m.res_amount[i] = wood_amount;
+                m.res_max[i]    = wood_amount;
             } else if(t == 2){ // gold
                 m.res_kind[i]   = (uint8_t)ResourceKind::Gold;
                 m.res_amount[i] = gold_amount;
+                m.res_max[i]    = gold_amount;
             } else {
                 m.res_kind[i]   = (uint8_t)ResourceKind::None;
                 m.res_amount[i] = 0;
+                m.res_max[i]    = 0;
             }
         }
     }
@@ -351,6 +383,15 @@ bool cancel_last_train(Sim& s, Building& b){
     return true;
 }
 
+bool cancel_train_at(Sim& s, Building& b, size_t idx){
+    if(b.kind!=BuildingKind::Barracks || b.queue.empty()) return false;
+    if(idx >= b.queue.size()) return false;
+    const UnitType& ut = s.unit_types[b.queue[idx].unit_type];
+    s.gold += ut.cost_gold; s.wood += ut.cost_wood; s.food_used -= ut.food;
+    b.queue.erase(b.queue.begin()+idx);
+    return true;
+}
+
 void step(Sim& s, uint32_t dt_ms){
     for(auto& e: s.units) unit_step(s,e,dt_ms);
 
@@ -372,12 +413,15 @@ void step(Sim& s, uint32_t dt_ms){
             b.state = BuildState::Constructing;
             float speed = 1.0f + 0.75f*(adj_workers-1);
             b.build_progress_ms += (int)(dt_ms * speed);
-            if(b.build_progress_ms >= b.build_total_ms){
+            if (b.build_progress_ms >= b.build_total_ms){
                 b.state = BuildState::Complete;
-                // effects
                 if(b.kind==BuildingKind::Dropoff){
                     s.dropoffs.push_back({b.tile.x,b.tile.y});
                     s.map.tiles[idx(s.map.width,b.tile.x,b.tile.y)] = 4;
+                    // >>> umožni stát na dropoffu (aby šlo doručovat)
+                    // dropoff je 1x1, proto odblokuj tuhle jednu tile
+                    for (int j=0;j<b.h;++j) for (int i=0;i<b.w;++i)
+                        s.map.blocked[idx(s.map.width, b.tile.x+i, b.tile.y+j)] = 0;
                 }else if(b.kind==BuildingKind::Farm){
                     s.food_cap += 4;
                 }
@@ -435,5 +479,208 @@ bool load_data(Sim& s, const std::string& assets_path){
     Vec2i d = s.dropoffs.empty()?Vec2i{1,1}:s.dropoffs[0];
     (void)spawn_unit(s, "worker", d.x+1, d.y);
     (void)spawn_unit(s, "footman", d.x+3, d.y);
+    return true;
+}
+
+// =========================
+// Save / Load (VERSION 1)
+// =========================
+static void write_line(std::ofstream& f, const std::string& s){ f << s << "\n"; }
+
+bool save_game(const Sim& s, const std::string& path){
+    std::ofstream f(path, std::ios::trunc);
+    if(!f) return false;
+
+    write_line(f, "VERSION 1");
+    // ekonomika & id
+    write_line(f, "ECO " + std::to_string(s.gold) + " " + std::to_string(s.wood) + " " +
+                    std::to_string(s.food_used) + " " + std::to_string(s.food_cap));
+    write_line(f, "IDS " + std::to_string(s.next_unit_id) + " " + std::to_string(s.next_building_id));
+
+    // mapa
+    write_line(f, "MAP " + std::to_string(s.map.width) + " " + std::to_string(s.map.height));
+
+    // tiles
+    write_line(f, "TILES");
+    for(int y=0;y<s.map.height;++y){
+        std::ostringstream row;
+        for(int x=0;x<s.map.width;++x){
+            if(x) row << ' ';
+            row << int(s.map.tiles[idx(s.map.width,x,y)]);
+        }
+        write_line(f, row.str());
+    }
+    // blocked
+    write_line(f, "BLOCKED");
+    for(int y=0;y<s.map.height;++y){
+        std::ostringstream row;
+        for(int x=0;x<s.map.width;++x){
+            if(x) row << ' ';
+            row << int(s.map.blocked[idx(s.map.width,x,y)]);
+        }
+        write_line(f, row.str());
+    }
+    // resource kind
+    write_line(f, "RESKIND");
+    for(int y=0;y<s.map.height;++y){
+        std::ostringstream row;
+        for(int x=0;x<s.map.width;++x){
+            if(x) row << ' ';
+            row << int(s.map.res_kind[idx(s.map.width,x,y)]);
+        }
+        write_line(f, row.str());
+    }
+    // resource amount
+    write_line(f, "RESAMNT");
+    for(int y=0;y<s.map.height;++y){
+        std::ostringstream row;
+        for(int x=0;x<s.map.width;++x){
+            if(x) row << ' ';
+            row << s.map.res_amount[idx(s.map.width,x,y)];
+        }
+        write_line(f, row.str());
+    }
+    write_line(f, "RESMAX");
+    for(int y=0;y<s.map.height;++y){
+        std::ostringstream row;
+        for(int x=0;x<s.map.width;++x){
+            if(x) row << ' ';
+            row << s.map.res_max[idx(s.map.width,x,y)];
+        }
+        write_line(f, row.str());
+    }
+
+    // dropoffy
+    write_line(f, "DROPOFFS " + std::to_string(s.dropoffs.size()));
+    for(auto d : s.dropoffs) write_line(f, "D " + std::to_string(d.x) + " " + std::to_string(d.y));
+
+    // budovy
+    write_line(f, "BUILDINGS " + std::to_string(s.buildings.size()));
+    for(const auto& b : s.buildings){
+        write_line(f, "B " + std::to_string(b.id) + " " + std::to_string((int)b.kind) + " " +
+                       std::to_string(b.tile.x) + " " + std::to_string(b.tile.y) + " " +
+                       std::to_string(b.w) + " " + std::to_string(b.h) + " " +
+                       std::to_string((int)b.state) + " " +
+                       std::to_string(b.build_progress_ms) + " " + std::to_string(b.build_total_ms) + " " +
+                       std::to_string(b.cost_gold) + " " + std::to_string(b.cost_wood) + " " +
+                       std::to_string(b.rally.x) + " " + std::to_string(b.rally.y));
+        write_line(f, "BQ " + std::to_string(b.queue.size()));
+        for(const auto& qi : b.queue){
+            const std::string& uid = s.unit_types[qi.unit_type].id;
+            write_line(f, "QI " + uid + " " + std::to_string(qi.remaining_ms));
+        }
+    }
+
+    // jednotky
+    write_line(f, "UNITS " + std::to_string(s.units.size()));
+    for(const auto& u : s.units){
+        const std::string& utype = s.unit_types[u.type_index].id;
+        write_line(f, "U " + std::to_string(u.id) + " " + utype + " " +
+                       std::to_string(u.tile.x) + " " + std::to_string(u.tile.y) + " " +
+                       std::to_string(u.goal.x) + " " + std::to_string(u.goal.y) + " " +
+                       std::to_string(u.hp) + " " + std::to_string((int)u.job) + " " +
+                       std::to_string(u.carried) + " " + std::to_string((int)u.carried_kind) + " " +
+                       std::to_string((int)u.building_target));
+    }
+    return true;
+}
+
+bool load_game(Sim& s, const std::string& path){
+    std::ifstream f(path);
+    if(!f) return false;
+
+    Sim ns; // dočasný nový stav (pro bezpečné načtení)
+    ns.unit_types = s.unit_types;
+    ns.unit_type_index = s.unit_type_index;
+
+    std::string line, tag;
+    int width=0, height=0;
+
+    if(!std::getline(f,line)) return false;
+    { std::istringstream iss(line); if(!(iss>>tag) || tag!="VERSION") return false; int ver=0; iss>>ver; if(ver!=1) return false; }
+
+    while(std::getline(f,line)){
+        if(line.empty()) continue;
+        std::istringstream iss(line); iss >> tag;
+        if(tag=="ECO"){
+            iss >> ns.gold >> ns.wood >> ns.food_used >> ns.food_cap;
+        }else if(tag=="IDS"){
+            iss >> ns.next_unit_id >> ns.next_building_id;
+        }else if(tag=="MAP"){
+            iss >> width >> height;
+            ns.map.width=width; ns.map.height=height;
+            ns.map.tiles.assign(width*height,0);
+            ns.map.blocked.assign(width*height,0);
+            ns.map.res_kind.assign(width*height,0);
+            ns.map.res_amount.assign(width*height,0);
+        }else if(tag=="TILES"){
+            for(int y=0;y<height;++y){
+                std::getline(f,line); std::istringstream rs(line);
+                for(int x=0;x<width;++x){ int v; rs>>v; ns.map.tiles[idx(width,x,y)]=(uint8_t)v; }
+            }
+        }else if(tag=="BLOCKED"){
+            for(int y=0;y<height;++y){
+                std::getline(f,line); std::istringstream rs(line);
+                for(int x=0;x<width;++x){ int v; rs>>v; ns.map.blocked[idx(width,x,y)]=(uint8_t)v; }
+            }
+        }else if(tag=="RESKIND"){
+            for(int y=0;y<height;++y){
+                std::getline(f,line); std::istringstream rs(line);
+                for(int x=0;x<width;++x){ int v; rs>>v; ns.map.res_kind[idx(width,x,y)]=(uint8_t)v; }
+            }
+        }else if(tag=="RESAMNT"){
+            for(int y=0;y<height;++y){
+                std::getline(f,line); std::istringstream rs(line);
+                for(int x=0;x<width;++x){ int v; rs>>v; ns.map.res_amount[idx(width,x,y)]=v; }
+            }
+        }else if(tag=="RESMAX"){
+            for(int y=0;y<height;++y){
+                std::getline(f,line); std::istringstream rs(line);
+                for(int x=0;x<width;++x){ int v; rs>>v; ns.map.res_max[idx(width,x,y)]=v; }
+            }
+        }else if(tag=="DROPOFFS"){
+            int n=0; iss>>n;
+            for(int i=0;i<n;++i){
+                std::getline(f,line); std::istringstream ds(line); std::string t; ds>>t; // "D"
+                Vec2i d{}; ds>>d.x>>d.y; ns.dropoffs.push_back(d);
+            }
+        }else if(tag=="BUILDINGS"){
+            int n=0; iss>>n;
+            for(int i=0;i<n;++i){
+                std::getline(f,line); std::istringstream bs(line); std::string t; bs>>t; // "B"
+                Building b{};
+                int kind, state;
+                bs >> b.id >> kind >> b.tile.x >> b.tile.y >> b.w >> b.h >> state
+                   >> b.build_progress_ms >> b.build_total_ms >> b.cost_gold >> b.cost_wood
+                   >> b.rally.x >> b.rally.y;
+                b.kind = (BuildingKind)kind;
+                b.state = (BuildState)state;
+                ns.buildings.push_back(b);
+
+                // queue hlavička
+                std::getline(f,line); std::istringstream qh(line); std::string tq; int qn=0; qh>>tq>>qn;
+                for(int k=0;k<qn;++k){
+                    std::getline(f,line); std::istringstream qi(line); std::string qtag, uid; int rem=0; qi>>qtag>>uid>>rem;
+                    auto it = ns.unit_type_index.find(uid);
+                    if(it!=ns.unit_type_index.end()) ns.buildings.back().queue.push_back(TrainItem{ (uint16_t)it->second, rem });
+                }
+            }
+        }else if(tag=="UNITS"){
+            int n=0; iss>>n;
+            for(int i=0;i<n;++i){
+                std::getline(f,line); std::istringstream us(line); std::string t, uid;
+                Unit u{}; int job, ck;
+                us>>t>>u.id>>uid>>u.tile.x>>u.tile.y>>u.goal.x>>u.goal.y>>u.hp>>job>>u.carried>>ck>>u.building_target;
+                auto it = ns.unit_type_index.find(uid);
+                if(it==ns.unit_type_index.end()) continue;
+                u.type_index = (uint16_t)it->second;
+                u.job = (UnitJob)job;
+                u.carried_kind = (uint8_t)ck;
+                ns.units.push_back(u);
+            }
+        }
+    }
+
+    s = std::move(ns); // přepiš běžící stav
     return true;
 }

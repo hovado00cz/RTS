@@ -24,7 +24,7 @@ events:
       The output was:
       0
       MSBuild verze 17.14.23+b0019275e pro .NET Framework
-      Vytv├í┼Öen├ş sestaven├ş bylo zah├íjeno 02.11.2025 23:18:56.
+      Vytv├í┼Öen├ş sestaven├ş bylo zah├íjeno 08.11.2025 18:04:25.
       
       Projekt C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\3.31.6-msvc6\\CompilerIdCXX\\CompilerIdCXX.vcxproj v uzlu 1 (v├Żchoz├ş c├şle).
       PrepareForBuild:
@@ -62,7 +62,7 @@ events:
           0 upozorn─Ťn├ş
           Po─Źet chyb: 0
       
-      Uplynul├Ż ─Źas 00:00:01.28
+      Uplynul├Ż ─Źas 00:00:01.69
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -81,8 +81,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-ckn47u"
-      binary: "C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-ckn47u"
+      source: "C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-2u6ovd"
+      binary: "C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-2u6ovd"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -96,40 +96,40 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-ckn47u'
+        Change Dir: 'C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-2u6ovd'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_6aae9.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_23004.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild verze 17.14.23+b0019275e pro .NET Framework
-        Vytv├í┼Öen├ş sestaven├ş bylo zah├íjeno 02.11.2025 23:18:58.
+        Vytv├í┼Öen├ş sestaven├ş bylo zah├íjeno 08.11.2025 18:04:28.
         
-        Projekt C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ckn47u\\cmTC_6aae9.vcxproj v uzlu 1 (v├Żchoz├ş c├şle).
+        Projekt C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-2u6ovd\\cmTC_23004.vcxproj v uzlu 1 (v├Żchoz├ş c├şle).
         PrepareForBuild:
-          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe cmTC_6aae9.dir\\Debug\\.
+          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe cmTC_23004.dir\\Debug\\.
           Strukturovan├Ż v├Żstup je povolen├Ż. Form├ítov├ín├ş diagnostiky kompil├ítoru bude odr├í┼żet hierarchii chyb. Dal┼í├ş podrobnosti najdete na https://aka.ms/cpp/structured-output.
-          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ckn47u\\Debug\\.
-          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe cmTC_6aae9.dir\\Debug\\cmTC_6aae9.tlog\\.
+          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-2u6ovd\\Debug\\.
+          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe cmTC_23004.dir\\Debug\\cmTC_23004.tlog\\.
         InitializeBuildStatus:
-          Prob├şh├í vytv├í┼Öen├ş souboru cmTC_6aae9.dir\\Debug\\cmTC_6aae9.tlog\\unsuccessfulbuild v d┼»sledku zad├ín├ş AlwaysCreate.
-          Prob├şh├í aktualizace ─Źasov├ęho raz├ştka pro cmTC_6aae9.dir\\Debug\\cmTC_6aae9.tlog\\unsuccessfulbuild.
+          Prob├şh├í vytv├í┼Öen├ş souboru cmTC_23004.dir\\Debug\\cmTC_23004.tlog\\unsuccessfulbuild v d┼»sledku zad├ín├ş AlwaysCreate.
+          Prob├şh├í aktualizace ─Źasov├ęho raz├ştka pro cmTC_23004.dir\\Debug\\cmTC_23004.tlog\\unsuccessfulbuild.
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_6aae9.dir\\Debug\\\\" /Fd"cmTC_6aae9.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_23004.dir\\Debug\\\\" /Fd"cmTC_23004.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
           Optimalizuj├şc├ş kompil├ítor C/C++ spole─Źnosti Microsoft (R) verze 19.44.35219 pro procesory x64
           Copyright (C) Microsoft Corporation. V┼íechna pr├íva vyhrazena.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_6aae9.dir\\Debug\\\\" /Fd"cmTC_6aae9.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_23004.dir\\Debug\\\\" /Fd"cmTC_23004.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ckn47u\\Debug\\cmTC_6aae9.exe" /INCREMENTAL /ILK:"cmTC_6aae9.dir\\Debug\\cmTC_6aae9.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-ckn47u/Debug/cmTC_6aae9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-ckn47u/Debug/cmTC_6aae9.lib" /MACHINE:X64  /machine:x64 cmTC_6aae9.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_6aae9.vcxproj -> C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ckn47u\\Debug\\cmTC_6aae9.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-2u6ovd\\Debug\\cmTC_23004.exe" /INCREMENTAL /ILK:"cmTC_23004.dir\\Debug\\cmTC_23004.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-2u6ovd/Debug/cmTC_23004.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/hovad/Desktop/RTS/build/CMakeFiles/CMakeScratch/TryCompile-2u6ovd/Debug/cmTC_23004.lib" /MACHINE:X64  /machine:x64 cmTC_23004.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_23004.vcxproj -> C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-2u6ovd\\Debug\\cmTC_23004.exe
         FinalizeBuildStatus:
-          Prob├şh├í odstra┼łov├ín├ş souboru cmTC_6aae9.dir\\Debug\\cmTC_6aae9.tlog\\unsuccessfulbuild.
-          Prob├şh├í aktualizace ─Źasov├ęho raz├ştka pro cmTC_6aae9.dir\\Debug\\cmTC_6aae9.tlog\\cmTC_6aae9.lastbuildstate.
-        Sestaven├ş projektu C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ckn47u\\cmTC_6aae9.vcxproj (s v├Żchoz├şmi c├şli) bylo dokon─Źeno.
+          Prob├şh├í odstra┼łov├ín├ş souboru cmTC_23004.dir\\Debug\\cmTC_23004.tlog\\unsuccessfulbuild.
+          Prob├şh├í aktualizace ─Źasov├ęho raz├ştka pro cmTC_23004.dir\\Debug\\cmTC_23004.tlog\\cmTC_23004.lastbuildstate.
+        Sestaven├ş projektu C:\\Users\\hovad\\Desktop\\RTS\\build\\CMakeFiles\\CMakeScratch\\TryCompile-2u6ovd\\cmTC_23004.vcxproj (s v├Żchoz├şmi c├şli) bylo dokon─Źeno.
         
         Vytv├í┼Öen├ş sestaven├ş bylo ├║sp─Ť┼ín─Ť dokon─Źeno.
             0 upozorn─Ťn├ş
             Po─Źet chyb: 0
         
-        Uplynul├Ż ─Źas 00:00:00.97
+        Uplynul├Ż ─Źas 00:00:00.77
         
       exitCode: 0
   -

@@ -21,6 +21,7 @@ struct Map {
     // NOVÉ:
     std::vector<uint8_t> res_kind;   // 0=None, 2=Gold, 3=Wood  (kopíruje semantiku tiles)
     std::vector<int>     res_amount; // zůstatek (např. Wood=300, Gold=500)
+    std::vector<int>     res_max;
 };
 
 enum class UnitJob:uint8_t{ Idle, Moving, GatheringGold, GatheringWood, Delivering, Building };
@@ -82,6 +83,7 @@ struct BuildingType{
 bool can_place_building(const Sim& s, BuildingType bt, int x, int y);
 BuildingId start_building(Sim& s, BuildingType bt, int x, int y); // deducts resources, reserves tiles
 void cancel_building(Sim& s, BuildingId id, bool refund);
+void remove_building(Sim& s, BuildingId id, bool refund);
 Vec2i nearest_dropoff(const Sim& s, Vec2i from);
 BuildingType get_btype(BuildingKind k);
 Building* find_building(Sim& s, BuildingId id);
@@ -90,7 +92,12 @@ const Building* find_building(const Sim& s, BuildingId id);
 // Production
 bool queue_train(Sim& s, Building& b, const std::string& unit_id, int count);
 bool cancel_last_train(Sim& s, Building& b);
+bool cancel_train_at(Sim& s, Building& b, size_t idx);
 
 void init_resources_from_tiles(Sim& sim, int wood_amount=300, int gold_amount=500);
 bool resource_take_at(Sim& s, int x, int y, int amount, int* actually_taken);
 static inline int ridx(const Map& m, int x, int y){ return y*m.width + x; }
+
+// --- Save/Load API ---
+bool save_game(const Sim& s, const std::string& path);
+bool load_game(Sim& s, const std::string& path);
